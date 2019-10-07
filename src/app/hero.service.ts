@@ -11,5 +11,7 @@ export class HeroService {
   getHeroes(): Observable<Hero[]> {
     return of(HEROES);
   }
-  constructor() { }
+  constructor(
+    private messageService: MessageService
+  ) { }
 }
