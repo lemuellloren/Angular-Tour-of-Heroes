@@ -4,6 +4,8 @@ import { Location } from '@angular/common';
 
 import { Hero }         from '../hero';
 import { HeroService }  from '../hero.service';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-hero-detail',
@@ -32,4 +34,16 @@ export class HeroDetailComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+  
+  save(): void {
+    this.heroService.updateHero(this.hero)
+    .subscribe(() => this.goBack());
+  }
+  /** PUT: update the hero on the server */
+  updateHero (hero: Hero): Observable<any> {
+    return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+      tap(_ => this.log(`updated hero id=${hero.id}`)),
+      catchError(this.handleError<any>('updateHero'))
+    );
+}
 }
